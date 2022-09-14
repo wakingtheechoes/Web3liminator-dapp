@@ -1,6 +1,7 @@
 const { useState, useEffect } = React
 function RegisterLayout(props) {
   const [eligibility, setEligibility] = useState(false)
+  const [username, setUsername] = useState('')
 
   useEffect(() => {
     TOKEN_READ_CONTRACT.balanceOf(props.activeAddress).then((tokenCount) => {
@@ -81,20 +82,38 @@ function RegisterLayout(props) {
                     </div> */}
                   <div className="text-center">
                     {props.activeAddress ? (
-                      <button
-                        onClick={() => {
-                          console.log(GAME_READ_CONTRACT)
-                          GAME_READ_WRITE_CONTRACT.register().catch((e) =>
-                            console.log(e)
-                          )
-                        }}
-                        className="btn btn-info btn-lg"
-                        disabled={eligibility ? '' : 'true'}
-                      >
-                        {eligibility ? 'Register' : 'Not Eligible'} <br />
-                        (Requires having at least <br /> one staked CryptoDad or
-                        CryptoMom)
-                      </button>
+                      <div>
+                        <div className="form-group has-default">
+                          <div className="input-group">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Choose a username"
+                              value={username}
+                              onChange={(e) => {
+                                console.log(e.target.value)
+                                setUsername(e.target.value)
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            console.log(GAME_READ_CONTRACT)
+                            console.log(username)
+                            GAME_READ_WRITE_CONTRACT.register(username).catch(
+                              (e) => console.log(e)
+                            )
+                          }}
+                          className="btn btn-info btn-lg"
+                          disabled={eligibility ? '' : 'true'}
+                        >
+                          {eligibility
+                            ? 'Register'
+                            : 'Not Eligible" +(Requires having at least <br /> one staked CryptoDad or CryptoMom)'}{' '}
+                          <br />
+                        </button>
+                      </div>
                     ) : (
                       <button
                         onClick={() => login()}

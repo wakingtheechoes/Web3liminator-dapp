@@ -2,13 +2,18 @@ const { useState, useEffect } = React
 
 function MainAppLayout(props) {
   const [registered, setRegistered] = useState(false)
+  const [username, setUsername] = useState(false)
 
   useEffect(() => {
     GAME_READ_CONTRACT.isRegistered(props.activeAddress).then(
       (isRegistered) => {
-        if (isRegistered) {
-          setRegistered(true)
-        }
+        setRegistered(true)
+      }
+    )
+
+    GAME_READ_CONTRACT.usernamesMapping(props.activeAddress).then(
+      (returned_username) => {
+        setUsername(returned_username)
       }
     )
   }, [props.activeAddress])
@@ -21,6 +26,7 @@ function MainAppLayout(props) {
             activeAddress={props.activeAddress}
             signer={props.signer}
             weekOfSeason={0}
+            username={username}
           />
           {/* <NavBar
             activeAddress={props.activeAddress}

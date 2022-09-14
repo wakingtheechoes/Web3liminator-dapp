@@ -273,6 +273,13 @@ const GAME_CONTRACT_ABI = [
     type: 'event',
   },
   {
+    inputs: [],
+    name: 'activeWeekIndex',
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'addressesRegisteredList',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -287,15 +294,29 @@ const GAME_CONTRACT_ABI = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'addressesToChallengesBoughtMapping',
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'advanceActiveWeekIndex',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint8[]', name: 'game_weeks', type: 'uint8[]' },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'home_teams',
         type: 'uint8[]',
       },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'away_teams',
         type: 'uint8[]',
       },
@@ -311,12 +332,12 @@ const GAME_CONTRACT_ABI = [
       { internalType: 'uint8[]', name: 'game_weeks', type: 'uint8[]' },
       { internalType: 'uint256[]', name: 'game_indexes', type: 'uint256[]' },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'home_teams',
         type: 'uint8[]',
       },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'away_teams',
         type: 'uint8[]',
       },
@@ -332,12 +353,19 @@ const GAME_CONTRACT_ABI = [
       { internalType: 'uint8[]', name: 'game_weeks', type: 'uint8[]' },
       { internalType: 'uint256[]', name: 'game_ids', type: 'uint256[]' },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'winning_teams',
         type: 'uint8[]',
       },
     ],
     name: 'bulkUpdateGameResults',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'buyAChallengeFlag',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -350,6 +378,13 @@ const GAME_CONTRACT_ABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'challengeFlagBuyingEnabled',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'address', name: '', type: 'address' },
       { internalType: 'uint256', name: '', type: 'uint256' },
@@ -357,7 +392,7 @@ const GAME_CONTRACT_ABI = [
     name: 'contestantWinnersPicked',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: '',
         type: 'uint8',
       },
@@ -393,17 +428,17 @@ const GAME_CONTRACT_ABI = [
       {
         components: [
           {
-            internalType: 'enum Web3liminator_V0.NFLTeam',
+            internalType: 'enum Web3liminator_V1.NFLTeam',
             name: 'homeTeam',
             type: 'uint8',
           },
           {
-            internalType: 'enum Web3liminator_V0.NFLTeam',
+            internalType: 'enum Web3liminator_V1.NFLTeam',
             name: 'awayTeam',
             type: 'uint8',
           },
           {
-            internalType: 'enum Web3liminator_V0.NFLTeam',
+            internalType: 'enum Web3liminator_V1.NFLTeam',
             name: 'winner',
             type: 'uint8',
           },
@@ -411,7 +446,7 @@ const GAME_CONTRACT_ABI = [
           { internalType: 'uint8', name: 'week', type: 'uint8' },
           { internalType: 'bool', name: 'resultHasBeenSet', type: 'bool' },
         ],
-        internalType: 'struct Web3liminator_V0.NFLGame[]',
+        internalType: 'struct Web3liminator_V1.NFLGame[]',
         name: '',
         type: 'tuple[]',
       },
@@ -424,7 +459,7 @@ const GAME_CONTRACT_ABI = [
     name: 'getAllPicksByWeek',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: '',
         type: 'uint8[]',
       },
@@ -455,7 +490,7 @@ const GAME_CONTRACT_ABI = [
     name: 'getPicksByAddress',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: '',
         type: 'uint8[]',
       },
@@ -468,7 +503,7 @@ const GAME_CONTRACT_ABI = [
     name: 'getTeamResultsByWeek',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.WeeklyResult[]',
+        internalType: 'enum Web3liminator_V1.WeeklyResult[]',
         name: '',
         type: 'uint8[]',
       },
@@ -478,9 +513,20 @@ const GAME_CONTRACT_ABI = [
   },
   {
     inputs: [
+      { internalType: 'uint8', name: 'numberToGive', type: 'uint8' },
+      { internalType: 'address', name: 'recipient', type: 'address' },
+    ],
+    name: 'giveChallengeFlags',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
       { internalType: 'address', name: 'eligibilityAddress', type: 'address' },
       { internalType: 'uint8', name: 'leagueWeeks', type: 'uint8' },
       { internalType: 'uint8', name: 'startingWeekOfSeason', type: 'uint8' },
+      { internalType: 'address', name: 'paymentTokenAddress', type: 'address' },
     ],
     name: 'initialize',
     outputs: [],
@@ -520,10 +566,19 @@ const GAME_CONTRACT_ABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'paymentToken',
+    outputs: [
+      { internalType: 'contract IERC20Upgradeable', name: '', type: 'address' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint8', name: 'week_of_season', type: 'uint8' },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: 'team_to_win',
         type: 'uint8',
       },
@@ -534,7 +589,7 @@ const GAME_CONTRACT_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [{ internalType: 'string', name: 'username', type: 'string' }],
     name: 'register',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -543,6 +598,20 @@ const GAME_CONTRACT_ABI = [
   {
     inputs: [],
     name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint8', name: 'week_of_season', type: 'uint8' }],
+    name: 'setActiveWeekIndex',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'bool', name: 'enabled', type: 'bool' }],
+    name: 'setChallengeFlagBuying',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -557,6 +626,15 @@ const GAME_CONTRACT_ABI = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'address', name: 'paymentTokenAddress', type: 'address' },
+    ],
+    name: 'setPaymentToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'startingWeek',
     outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
@@ -566,7 +644,7 @@ const GAME_CONTRACT_ABI = [
   {
     inputs: [
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: '',
         type: 'uint8',
       },
@@ -575,7 +653,7 @@ const GAME_CONTRACT_ABI = [
     name: 'teamResultsByWeek',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.WeeklyResult',
+        internalType: 'enum Web3liminator_V1.WeeklyResult',
         name: '',
         type: 'uint8',
       },
@@ -594,12 +672,12 @@ const GAME_CONTRACT_ABI = [
     inputs: [
       { internalType: 'uint8[]', name: 'game_weeks', type: 'uint8[]' },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam[]',
+        internalType: 'enum Web3liminator_V1.NFLTeam[]',
         name: 'teams',
         type: 'uint8[]',
       },
       {
-        internalType: 'enum Web3liminator_V0.WeeklyResult[]',
+        internalType: 'enum Web3liminator_V1.WeeklyResult[]',
         name: 'results',
         type: 'uint8[]',
       },
@@ -624,17 +702,17 @@ const GAME_CONTRACT_ABI = [
     name: 'weeksToGamesMapping',
     outputs: [
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: 'homeTeam',
         type: 'uint8',
       },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: 'awayTeam',
         type: 'uint8',
       },
       {
-        internalType: 'enum Web3liminator_V0.NFLTeam',
+        internalType: 'enum Web3liminator_V1.NFLTeam',
         name: 'winner',
         type: 'uint8',
       },
@@ -643,6 +721,13 @@ const GAME_CONTRACT_ABI = [
       { internalType: 'bool', name: 'resultHasBeenSet', type: 'bool' },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'withdrawAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
 ]

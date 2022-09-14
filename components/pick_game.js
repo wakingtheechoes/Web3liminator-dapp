@@ -3,6 +3,7 @@ function PickGame(props) {
   const [games, setGames] = useState([])
   const [eliminated, setEliminated] = useState(false)
   const [picks, setPicks] = useState([])
+  const [challengesRemain, setChallengesRemain] = useState(0)
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -18,6 +19,12 @@ function PickGame(props) {
 
     GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
       setPicks(picks)
+    })
+
+    GAME_READ_CONTRACT.addressesToChallengesBoughtMapping(
+      props.activeAddress
+    ).then((challenges) => {
+      setChallengesRemain(challenges)
     })
     // GAME_READ_CONTRACT.getGameEntrants(props.id).then((gEntries) => {
     //   let myEntryCount = 0
@@ -40,15 +47,14 @@ function PickGame(props) {
       <div className="row">
         <div className="col-md-10 ml-auto mr-auto">
           <div className="card">
-            <h2 className="card-title text-center">
-              {props.activeAddress.substring(0, 7) +
-                '...' +
-                props.activeAddress.substring(props.activeAddress.length - 7)}
-            </h2>
+            <h2 className="card-title text-center">{props.username}</h2>
 
             <h4 className="card-title text-center">
               ELIMINATOR STATUS:
               {eliminated ? ' ELIMINATED' : ' ALIVE'}
+            </h4>
+            <h4 className="card-title text-center">
+              CHALLENGE FLAGS BOUGHT: {challengesRemain} / 1
             </h4>
             <div className="card-body">
               <div className="table-responsive">
