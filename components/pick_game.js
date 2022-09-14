@@ -39,6 +39,8 @@ function PickGame(props) {
   }, [props.weekOfSeason, props.activeAddress])
 
   function pickTeam(week, team_id) {
+    console.log(week, team_id)
+    console.log(GAME_READ_WRITE_CONTRACT)
     GAME_READ_WRITE_CONTRACT.pickWeeklyWinner(week, team_id)
   }
 
@@ -95,9 +97,10 @@ function PickGame(props) {
                         <td className="text-center">@</td>
                         <td>
                           <button
-                            onClick={() =>
+                            onClick={() => {
+                              console.log(game.homeTeam)
                               pickTeam(props.weekOfSeason, game.homeTeam)
-                            }
+                            }}
                             className={
                               picks[props.weekOfSeason] == game.homeTeam
                                 ? 'btn btn-success btn-block btn-sm'

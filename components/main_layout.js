@@ -7,7 +7,12 @@ function MainAppLayout(props) {
   useEffect(() => {
     GAME_READ_CONTRACT.isRegistered(props.activeAddress).then(
       (isRegistered) => {
-        setRegistered(true)
+        if (isRegistered == true) {
+          console.log('registered', isRegistered)
+          setRegistered(true)
+        } else {
+          setRegistered(false)
+        }
       }
     )
 
