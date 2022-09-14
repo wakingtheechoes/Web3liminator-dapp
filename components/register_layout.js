@@ -101,8 +101,23 @@ function RegisterLayout(props) {
                           onClick={() => {
                             console.log(GAME_READ_CONTRACT)
                             console.log(username)
+
                             GAME_READ_WRITE_CONTRACT.register(username).catch(
-                              (e) => console.log(e)
+                              (e) => {
+                                console.log(e)
+
+                                Swal.fire({
+                                  title: 'Error',
+                                  text: e.data.message,
+                                  icon: 'warning',
+                                  // showCancelButton: true,
+                                  customClass: {
+                                    confirmButton: 'btn btn-success',
+                                    cancelButton: 'btn btn-danger',
+                                  },
+                                  confirmButtonText: 'Ok',
+                                })
+                              }
                             )
                           }}
                           className="btn btn-info btn-lg"

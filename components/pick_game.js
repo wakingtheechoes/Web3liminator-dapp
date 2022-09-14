@@ -41,7 +41,19 @@ function PickGame(props) {
   function pickTeam(week, team_id) {
     console.log(week, team_id)
     console.log(GAME_READ_WRITE_CONTRACT)
-    GAME_READ_WRITE_CONTRACT.pickWeeklyWinner(week, team_id)
+    GAME_READ_WRITE_CONTRACT.pickWeeklyWinner(week, team_id).catch((e) => {
+      Swal.fire({
+        title: 'Error',
+        text: e.data.message,
+        icon: 'warning',
+        // showCancelButton: true,
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger',
+        },
+        confirmButtonText: 'Ok',
+      })
+    })
   }
 
   return (
