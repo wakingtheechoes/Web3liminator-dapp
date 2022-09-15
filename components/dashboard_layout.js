@@ -271,7 +271,11 @@ function DashboardLayout(props) {
                         <h3 class="card-title">
                           WEEK {props.weekOfSeason + 2}
                         </h3>
-                        <a href="#" class="btn btn-rose btn-round">
+                        <a
+                          href="#"
+                          onClick={() => setPickWeek(props.weekOfSeason)}
+                          class="btn btn-rose btn-round"
+                        >
                           Click to see Games
                         </a>
                       </div>
