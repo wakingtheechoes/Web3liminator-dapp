@@ -86,8 +86,8 @@ function PickGame(props) {
                       <tr
                         key={i}
                         className={
-                          Math.floor(Date.now() / 1000) <
-                          game.kickoffTime.toString()
+                          Math.floor(Date.now()) <
+                          parseInt(game.kickoffTime._hex) * 1000
                             ? 'my-0'
                             : 'my-0 bg-dark'
                         }
@@ -126,10 +126,11 @@ function PickGame(props) {
                           {new Date(
                             game.kickoffTime.toNumber() * 1000
                           ).toLocaleDateString('en-US')}
-                          {/* <br />
+                          <br />
+                          {game.kickoffTime.toString()}
                           {new Date(
                             game.kickoffTime.toNumber() * 1000
-                          ).toLocaleTimeString('en-US')} */}
+                          ).toLocaleTimeString('en-US')}
                         </td>
                       </tr>
                     ))}
