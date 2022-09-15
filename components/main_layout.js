@@ -37,7 +37,7 @@ function MainAppLayout(props) {
 
   return (
     <div>
-      {!loaded ? (
+      {props.activeAddress && !loaded ? (
         <div className="spinner"></div>
       ) : (
         <div>
