@@ -733,7 +733,12 @@ const GAME_CONTRACT_ABI = [
 ]
 
 const read_provider = new ethers.providers.JsonRpcProvider(ALCHEMY_RPC_URL, 137)
-const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+let provider
+if (window.ethereum) {
+  provider = new ethers.providers.Web3Provider(window.ethereum, 137)
+} else {
+  provider = null
+}
 
 // If you don't specify a //url//, Ethers connects to the default
 // (i.e. ``http:/\/localhost:8545``)
@@ -749,33 +754,78 @@ let activeNetwork
 let GAME_READ_WRITE_CONTRACT
 let TOKEN_READ_WRITE_CONTRACT
 
-window.ethereum.on('chainChanged', async () => {
-  activeNetwork = await provider.getNetwork()
-  root.render(
-    e(MainAppLayout, {
-      activeAddress: active_address,
-      signer: signer,
-    })
-  )
-})
+if (window.ethereum) {
+  window.ethereum.on('chainChanged', async () => {
+    console.log('network change')
+    window.location.reload()
+    // activeNetwork = await provider.getNetwork()
+    // root.render(
+    //   e(MainAppLayout, {
+    //     activeAddress: active_address,
+    //     signer: signer,
+    //   })
+    // )
+  })
 
-window.ethereum.on('accountsChanged', async () => {
-  // Do something
-  signer = await provider.getSigner()
+  window.ethereum.on('accountsChanged', async () => {
+    // Do something
+    signer = await provider.getSigner()
+    console.log(signer)
+    activeNetwork = await provider.getNetwork()
+    signer
+      .getAddress()
+      .then((val) => {
+        // connected to site
+        console.log('Account:', val)
+        active_address = val
+        console.log(active_address)
+        GAME_READ_WRITE_CONTRACT = new ethers.Contract(
+          GAME_CONTRACT_ADDRESS,
+          GAME_CONTRACT_ABI,
+          signer
+        )
+        TOKEN_READ_WRITE_CONTRACT = new ethers.Contract(
+          TOKEN_CONTRACT_ADDRESS,
+          TOKEN_CONTRACT_ABI,
+          signer
+        )
+        root.render(
+          e(MainAppLayout, {
+            activeAddress: active_address,
+            signer: signer,
+          })
+        )
+      })
+      .catch((err) => {
+        // not connected to site
+        console.log(err)
+
+        // The provider also allows signing transactions to
+        // send ether and pay to change state within the blockchain.
+        // For this, we need the account signer...
+        // Prompt user for account connections
+      })
+    console.log('account changed')
+  })
+}
+let signer
+if (provider != null) {
+  signer = provider.getSigner()
+
+  // signer = await provider.getSigner()
   console.log(signer)
-  activeNetwork = await provider.getNetwork()
+  provider.getNetwork().then((val) => (activeNetwork = val))
   signer
     .getAddress()
     .then((val) => {
-      // connected to site
-      console.log('Account:', val)
+      console.log(val)
       active_address = val
-      console.log(active_address)
       GAME_READ_WRITE_CONTRACT = new ethers.Contract(
         GAME_CONTRACT_ADDRESS,
         GAME_CONTRACT_ABI,
         signer
       )
+      console.log(GAME_READ_WRITE_CONTRACT)
       TOKEN_READ_WRITE_CONTRACT = new ethers.Contract(
         TOKEN_CONTRACT_ADDRESS,
         TOKEN_CONTRACT_ABI,
@@ -797,46 +847,7 @@ window.ethereum.on('accountsChanged', async () => {
       // For this, we need the account signer...
       // Prompt user for account connections
     })
-  console.log('account changed')
-})
-
-let signer = provider.getSigner()
-
-// signer = await provider.getSigner()
-console.log(signer)
-provider.getNetwork().then((val) => (activeNetwork = val))
-signer
-  .getAddress()
-  .then((val) => {
-    console.log(val)
-    active_address = val
-    GAME_READ_WRITE_CONTRACT = new ethers.Contract(
-      GAME_CONTRACT_ADDRESS,
-      GAME_CONTRACT_ABI,
-      signer
-    )
-    console.log(GAME_READ_WRITE_CONTRACT)
-    TOKEN_READ_WRITE_CONTRACT = new ethers.Contract(
-      TOKEN_CONTRACT_ADDRESS,
-      TOKEN_CONTRACT_ABI,
-      signer
-    )
-    root.render(
-      e(MainAppLayout, {
-        activeAddress: active_address,
-        signer: signer,
-      })
-    )
-  })
-  .catch((err) => {
-    // not connected to site
-    console.log(err)
-
-    // The provider also allows signing transactions to
-    // send ether and pay to change state within the blockchain.
-    // For this, we need the account signer...
-    // Prompt user for account connections
-  })
+}
 
 // TODODODODODO
 // document.getElementById('btn-big-connect').onclick = ethers_login

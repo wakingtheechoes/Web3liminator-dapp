@@ -84,4 +84,4 @@ const e = React.createElement
 
 const reactAppDOM = document.querySelector('#react-app-main-layout')
 const root = ReactDOM.createRoot(reactAppDOM)
-root.render(e(MainAppLayout, { activeAddress: active_address }))
+root.render(e(MainAppLayout, { activeAddress: active_address, signer: signer }))

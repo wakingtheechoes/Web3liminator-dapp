@@ -5,6 +5,7 @@ function PickGame(props) {
   const [picks, setPicks] = useState([])
   const [challengesRemain, setChallengesRemain] = useState(0)
   const [pastPicks, setPastPicks] = useState([])
+  const [chainID, setChainID] = useState('0')
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -40,6 +41,10 @@ function PickGame(props) {
     //   setEntries(gEntries)
     //   setMyEntries(myEntryCount)
     // })
+
+    props.signer.getChainId().then((chainid) => {
+      setChainID(chainid)
+    })
   }, [props.weekOfSeason, props.activeAddress])
 
   function pickTeam(week, team_id) {
@@ -70,7 +75,23 @@ function PickGame(props) {
               , or{' '}
               <button
                 className="btn btn-secondary"
-                onClick={() => pickTeam(props.weekOfSeason, 0)}
+                onClick={() => {
+                  if (chainID == 137) {
+                    pickTeam(props.weekOfSeason, 0)
+                  } else {
+                    Swal.fire({
+                      title: 'Wrong Network',
+                      text: 'You must be connected to the polygon network to make changes',
+                      icon: 'warning',
+                      // showCancelButton: true,
+                      customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger',
+                      },
+                      confirmButtonText: 'Ok',
+                    })
+                  }
+                }}
               >
                 Click here to reset to "None"
               </button>
@@ -103,9 +124,23 @@ function PickGame(props) {
                   >
                     <td>
                       <button
-                        onClick={() =>
-                          pickTeam(props.weekOfSeason, game.awayTeam)
-                        }
+                        onClick={() => {
+                          if (chainID == 137) {
+                            pickTeam(props.weekOfSeason, game.awayTeam)
+                          } else {
+                            Swal.fire({
+                              title: 'Wrong Network',
+                              text: 'You must be connected to the polygon network to make changes',
+                              icon: 'warning',
+                              // showCancelButton: true,
+                              customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger',
+                              },
+                              confirmButtonText: 'Ok',
+                            })
+                          }
+                        }}
                         className={
                           picks[props.weekOfSeason] == game.awayTeam
                             ? 'btn btn-success btn-block btn-sm'
@@ -121,8 +156,21 @@ function PickGame(props) {
                     <td>
                       <button
                         onClick={() => {
-                          console.log(game.homeTeam)
-                          pickTeam(props.weekOfSeason, game.homeTeam)
+                          if (chainID == 137) {
+                            pickTeam(props.weekOfSeason, game.homeTeam)
+                          } else {
+                            Swal.fire({
+                              title: 'Wrong Network',
+                              text: 'You must be connected to the polygon network to make changes',
+                              icon: 'warning',
+                              // showCancelButton: true,
+                              customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger',
+                              },
+                              confirmButtonText: 'Ok',
+                            })
+                          }
                         }}
                         className={
                           picks[props.weekOfSeason] == game.homeTeam

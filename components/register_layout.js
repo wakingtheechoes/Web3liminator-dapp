@@ -2,6 +2,7 @@ const { useState, useEffect } = React
 function RegisterLayout(props) {
   const [eligibility, setEligibility] = useState(false)
   const [username, setUsername] = useState('')
+  const [chainID, setChainID] = useState('0')
 
   useEffect(() => {
     TOKEN_READ_CONTRACT.balanceOf(props.activeAddress).then((tokenCount) => {
@@ -9,11 +10,15 @@ function RegisterLayout(props) {
         setEligibility(true)
       }
     })
+
+    props.signer.getChainId().then((chainid) => {
+      setChainID(chainid)
+    })
   }, [props.activeAddress])
 
   function login() {
     provider.send('eth_requestAccounts', []).then((val) => {
-      console.log(val)
+      window.location.reload()
     })
   }
 
@@ -27,7 +32,7 @@ function RegisterLayout(props) {
             </h2>
             <div className="card-body mb-4">
               <div className="row">
-                <div className="col-lg-6 ml-auto">
+                <div className="col-lg-6 order-2 order-lg-1 ml-auto">
                   <div className="info info-horizontal info-register">
                     <div className="icon icon-rose">
                       <i className="material-icons">timeline</i>
@@ -71,7 +76,7 @@ function RegisterLayout(props) {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6 mr-auto my-auto">
+                <div className="col-lg-6 order-1 order-lg-2 mr-auto my-auto">
                   {/* <div className="form-check">
                       <label className="form-check-label">
                         <input
@@ -90,59 +95,127 @@ function RegisterLayout(props) {
                   <div className="text-center">
                     {props.activeAddress ? (
                       <div>
-                        <div className="form-group has-default">
-                          <div className="input-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Choose a username to join"
-                              value={username}
-                              onChange={(e) => {
-                                console.log(e.target.value)
-                                setUsername(e.target.value)
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => {
-                            console.log(GAME_READ_CONTRACT)
-                            console.log(username)
+                        {chainID == 137 ? (
+                          <div>
+                            <div className="mb-6">
+                              <p className="mb-0">Connected Wallet:</p>
+                              <p>{props.activeAddress}</p>
+                            </div>
+                            <br></br>
+                            <div className="form-group has-default">
+                              <div className="input-group">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Choose a username to join"
+                                  value={username}
+                                  onChange={(e) => {
+                                    console.log(e.target.value)
+                                    setUsername(e.target.value)
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => {
+                                console.log(GAME_READ_CONTRACT)
+                                console.log(username)
 
-                            GAME_READ_WRITE_CONTRACT.register(username).catch(
-                              (e) => {
-                                console.log(e)
+                                GAME_READ_WRITE_CONTRACT.register(
+                                  username
+                                ).catch((e) => {
+                                  console.log(e)
 
-                                Swal.fire({
-                                  title: 'Error',
-                                  text: e.data.message,
-                                  icon: 'warning',
-                                  // showCancelButton: true,
-                                  customClass: {
-                                    confirmButton: 'btn btn-success',
-                                    cancelButton: 'btn btn-danger',
-                                  },
-                                  confirmButtonText: 'Ok',
+                                  Swal.fire({
+                                    title: 'Error',
+                                    text: e.data.message,
+                                    icon: 'warning',
+                                    // showCancelButton: true,
+                                    customClass: {
+                                      confirmButton: 'btn btn-success',
+                                      cancelButton: 'btn btn-danger',
+                                    },
+                                    confirmButtonText: 'Ok',
+                                  })
                                 })
+                              }}
+                              className="btn btn-info btn-lg"
+                              disabled={
+                                eligibility && username.length > 0 ? '' : true
                               }
-                            )
-                          }}
-                          className="btn btn-info btn-lg"
-                          disabled={
-                            eligibility && username.length > 0 ? '' : true
-                          }
-                        >
-                          {eligibility ? 'Register' : 'Not Eligible'}
-                        </button>
-                        <br />
-                        <br />
-                        {!eligibility && (
-                          <h4>
-                            To be eligible for the STEAK league you must have at
-                            least one staked CryptoDad or CryptoMom throughout
-                            the league duration
-                          </h4>
+                            >
+                              {eligibility ? 'Register' : 'Not Eligible'}
+                            </button>
+                            <br />
+                            <br />
+                            {!eligibility && (
+                              <h4 className="text-warning">
+                                To be eligible for the STEAK league you must
+                                have at least one staked CryptoDad or CryptoMom
+                                throughout the league duration
+                              </h4>
+                            )}
+                          </div>
+                        ) : (
+                          <div>
+                            <button
+                              onClick={() => {
+                                window.ethereum
+                                  .request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [
+                                      {
+                                        chainId: '0x89',
+                                      },
+                                    ],
+                                  })
+                                  .then(() => {
+                                    window.location.reload()
+                                  })
+                                  .catch(() => {
+                                    window.ethereum.request({
+                                      method: 'wallet_addEthereumChain',
+                                      params: [
+                                        {
+                                          chainId: '0x89',
+                                          rpcUrls: [
+                                            'https://rpc-mainnet.matic.network/',
+                                          ],
+                                          chainName: 'Matic Mainnet',
+                                          nativeCurrency: {
+                                            name: 'MATIC',
+                                            symbol: 'MATIC',
+                                            decimals: 18,
+                                          },
+                                          blockExplorerUrls: [
+                                            'https://polygonscan.com/',
+                                          ],
+                                        },
+                                      ],
+                                    })
+                                  })
+                              }}
+                              className="btn btn-info btn-lg"
+                            >
+                              Switch to Polygon.
+                            </button>
+                            <h4>
+                              You must be on the polygon network to interact
+                              with the Steak League site
+                            </h4>
+                          </div>
                         )}
+                      </div>
+                    ) : !signer ? (
+                      <div>
+                        <h4 className="mx-4 text-warning">
+                          <strong>
+                            In order to interact with the Steak League site, you
+                            will need to use a Web3 Enabled browser such as
+                            Brave or install the Metamask plugin for your
+                            current browser
+                          </strong>
+                        </h4>
                       </div>
                     ) : (
                       <button
