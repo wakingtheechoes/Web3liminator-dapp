@@ -61,94 +61,102 @@ function PickGame(props) {
   }
 
   return (
-    <div className="container game-pick-container">
-      <div className="row">
-        <div className="col-md-10 ml-auto mr-auto">
-          <div className="card">
-            <h2 className="card-title text-center">{props.username}</h2>
-
-            <h4 className="card-title text-center">
-              ELIMINATOR STATUS:
-              {eliminated ? ' ELIMINATED' : ' ALIVE'}
-            </h4>
-            <h4 className="card-title text-center">
-              CHALLENGE FLAGS BOUGHT: {challengesRemain} / 1
-            </h4>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table">
-                  <thead className="">
-                    <tr>
-                      <th>Away Team</th>
-                      <th></th>
-                      <th>Home Team</th>
-                      <th>Kickoff</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {games.map((game, i) => (
-                      <tr
-                        key={i}
+    <div className="ml-auto mr-auto">
+      <div className="card-header">
+        <h3>
+          Pick a team below to win on week {props.weekOfSeason + 2}
+          {pastPicks[props.weekOfSeason] > 0 && (
+            <span>
+              , or{' '}
+              <button
+                className="btn btn-secondary"
+                onClick={() => pickTeam(props.weekOfSeason, 0)}
+              >
+                Click here to reset to "None"
+              </button>
+            </span>
+          )}
+        </h3>
+      </div>
+      <div className="card-body">
+        {games.length > 0 ? (
+          <div className="table-responsive">
+            <table className="table">
+              <thead className="">
+                <tr>
+                  <th>Away Team</th>
+                  <th></th>
+                  <th>Home Team</th>
+                  <th>Kickoff</th>
+                </tr>
+              </thead>
+              <tbody>
+                {games.map((game, i) => (
+                  <tr
+                    key={i}
+                    className={
+                      Math.floor(Date.now()) <
+                      parseInt(game.kickoffTime._hex) * 1000
+                        ? 'my-0'
+                        : 'my-0 bg-dark'
+                    }
+                  >
+                    <td>
+                      <button
+                        onClick={() =>
+                          pickTeam(props.weekOfSeason, game.awayTeam)
+                        }
                         className={
-                          Math.floor(Date.now()) <
-                          parseInt(game.kickoffTime._hex) * 1000
-                            ? 'my-0'
-                            : 'my-0 bg-dark'
+                          picks[props.weekOfSeason] == game.awayTeam
+                            ? 'btn btn-success btn-block btn-sm'
+                            : pastPicks.includes(game.awayTeam)
+                            ? 'btn btn-used btn-block btn-sm'
+                            : 'btn btn-secondary btn-block btn-sm'
                         }
                       >
-                        <td>
-                          <button
-                            onClick={() =>
-                              pickTeam(props.weekOfSeason, game.awayTeam)
-                            }
-                            className={
-                              picks[props.weekOfSeason] == game.awayTeam
-                                ? 'btn btn-success btn-block btn-sm'
-                                : pastPicks.includes(game.awayTeam)
-                                ? 'btn btn-warning btn-block btn-sm'
-                                : 'btn btn-secondary btn-block btn-sm'
-                            }
-                          >
-                            {TEAMS[game.awayTeam].abbreviation}
-                          </button>
-                        </td>
-                        <td className="text-center">@</td>
-                        <td>
-                          <button
-                            onClick={() => {
-                              console.log(game.homeTeam)
-                              pickTeam(props.weekOfSeason, game.homeTeam)
-                            }}
-                            className={
-                              picks[props.weekOfSeason] == game.homeTeam
-                                ? 'btn btn-success btn-block btn-sm'
-                                : pastPicks.includes(game.homeTeam)
-                                ? 'btn btn-warning btn-block btn-sm'
-                                : 'btn btn-secondary btn-block btn-sm'
-                            }
-                          >
-                            {TEAMS[game.homeTeam].abbreviation}
-                          </button>
-                        </td>
-                        <td>
-                          {new Date(
-                            game.kickoffTime.toNumber() * 1000
-                          ).toLocaleDateString('en-US')}
-                          <br />
-                          {new Date(
-                            game.kickoffTime.toNumber() * 1000
-                          ).toLocaleTimeString('en-US')}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="row">
-                <div className="col-md-12 ml-auto"></div>
-              </div>
-            </div>
+                        {TEAMS[game.awayTeam].abbreviation}
+                      </button>
+                    </td>
+                    <td className="text-center">@</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          console.log(game.homeTeam)
+                          pickTeam(props.weekOfSeason, game.homeTeam)
+                        }}
+                        className={
+                          picks[props.weekOfSeason] == game.homeTeam
+                            ? 'btn btn-success btn-block btn-sm'
+                            : pastPicks.includes(game.homeTeam)
+                            ? 'btn btn-used btn-block btn-sm'
+                            : 'btn btn-secondary btn-block btn-sm'
+                        }
+                      >
+                        {TEAMS[game.homeTeam].abbreviation}
+                      </button>
+                    </td>
+                    <td>
+                      {new Date(
+                        game.kickoffTime.toNumber() * 1000
+                      ).toLocaleDateString('en-US')}
+                      <br />
+                      {new Date(
+                        game.kickoffTime.toNumber() * 1000
+                      ).toLocaleTimeString('en-US')}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        ) : (
+          <h4 className="text-light">
+            No games have been loaded into the contract for this week yet. Check
+            back later.
+          </h4>
+        )}
+        <div className="row">
+          <div className="col-md-12 ml-auto"></div>
         </div>
       </div>
     </div>

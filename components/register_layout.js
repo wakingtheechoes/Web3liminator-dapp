@@ -18,53 +18,60 @@ function RegisterLayout(props) {
   }
 
   return (
-    <div className="container register-container">
+    <div className="container">
       <div className="row">
-        <div className="col-md-10 ml-auto mr-auto">
+        <div className="col-lg-12 ml-auto mr-auto">
           <div className="card card-signup">
-            <h2 className="card-title text-center">Welcome to Web3liminator</h2>
-            <div className="card-body">
+            <h2 className="card-title text-center mt-3  ">
+              CryptoDads Steak League
+            </h2>
+            <div className="card-body mb-4">
               <div className="row">
-                <div className="col-md-5 ml-auto">
-                  <div className="info info-horizontal">
+                <div className="col-lg-6 ml-auto">
+                  <div className="info info-horizontal info-register">
                     <div className="icon icon-rose">
                       <i className="material-icons">timeline</i>
                     </div>
-                    <div className="description">
-                      <h4 className="info-title">Pick Games to Win</h4>
-                      <p className="description">
-                        Pick an NFLgame winner each week. You can only use a
-                        team one time the entire season. Pick a loser, and
-                        you're out!
+                    <div className="description  text-white">
+                      <h3 className="info-title  text-white">
+                        Pick Games to Win
+                      </h3>
+                      <p className="description  text-white">
+                        Pick an NFL winner each week. You can only use a team{' '}
+                        <strong>one time the entire season</strong>. Pick a
+                        loser, and you're out! (Alpha: you may be able to use
+                        some STEAK to find your way back in)
                       </p>
                     </div>
                   </div>
-                  <div className="info info-horizontal">
+                  <div className="info info-horizontal  info-register">
                     <div className="icon icon-primary">
                       <i className="material-icons">code</i>
                     </div>
-                    <div className="description">
-                      <h4 className="info-title">Web3 Native</h4>
-                      <p className="description">
-                        Total transparency of picks and scoring via a custom
-                        smart contract.
+                    <div className="description  text-white">
+                      <h3 className="info-title  text-white">Custom Build</h3>
+                      <p className="description text-white">
+                        Built By a Cryptodads for Cryptodads (And Moms!)
                       </p>
                     </div>
                   </div>
-                  <div className="info info-horizontal">
+                  <div className="info info-horizontal  info-register">
                     <div className="icon icon-info">
-                      <i className="material-icons">group</i>
+                      <img
+                        src="https://steak.cryptodadsnft.com/img/stake.png"
+                        width="30px"
+                      />
                     </div>
                     <div className="description">
-                      <h4 className="info-title">Community Focused</h4>
-                      <p className="description">
-                        Run a league that requires holding a specific ERC721
-                        token.
+                      <h3 className="info-title text-white">STEAK!</h3>
+                      <p className="description text-white">
+                        Requires having at least one staked mom or dad to be
+                        able to join the league and make your weekly picks
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-5 mr-auto my-auto">
+                <div className="col-lg-6 mr-auto my-auto">
                   {/* <div className="form-check">
                       <label className="form-check-label">
                         <input
@@ -88,7 +95,7 @@ function RegisterLayout(props) {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Choose a username"
+                              placeholder="Choose a username to join"
                               value={username}
                               onChange={(e) => {
                                 console.log(e.target.value)
@@ -121,13 +128,21 @@ function RegisterLayout(props) {
                             )
                           }}
                           className="btn btn-info btn-lg"
-                          disabled={eligibility ? '' : 'true'}
+                          disabled={
+                            eligibility && username.length > 0 ? '' : true
+                          }
                         >
-                          {eligibility
-                            ? 'Register'
-                            : 'Not Eligible" +(Requires having at least <br /> one staked CryptoDad or CryptoMom)'}{' '}
-                          <br />
+                          {eligibility ? 'Register' : 'Not Eligible'}
                         </button>
+                        <br />
+                        <br />
+                        {!eligibility && (
+                          <h4>
+                            To be eligible for the STEAK league you must have at
+                            least one staked CryptoDad or CryptoMom throughout
+                            the league duration
+                          </h4>
+                        )}
                       </div>
                     ) : (
                       <button

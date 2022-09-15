@@ -4,41 +4,52 @@ function MainAppLayout(props) {
   const [registered, setRegistered] = useState(false)
   const [username, setUsername] = useState(false)
   const [activeWeek, setActiveWeek] = useState(0)
+  const [loadedCount, setLoadedCount] = useState(0)
+  const [loaded, setLoaded] = useState(0)
 
   useEffect(() => {
-    GAME_READ_CONTRACT.isRegistered(props.activeAddress).then(
-      (isRegistered) => {
-        if (isRegistered == true) {
-          console.log('registered', isRegistered)
-          setRegistered(true)
-        } else {
-          setRegistered(false)
+    async function fetchData() {
+      await GAME_READ_CONTRACT.isRegistered(props.activeAddress).then(
+        (isRegistered) => {
+          if (isRegistered == true) {
+            console.log('registered', isRegistered)
+            setRegistered(true)
+          } else {
+            setRegistered(false)
+          }
         }
-      }
-    )
+      )
 
-    GAME_READ_CONTRACT.activeWeekIndex().then((aw) => {
-      setActiveWeek(aw)
-    })
+      await GAME_READ_CONTRACT.activeWeekIndex().then((aw) => {
+        setActiveWeek(aw)
+      })
 
-    GAME_READ_CONTRACT.usernamesMapping(props.activeAddress).then(
-      (returned_username) => {
-        setUsername(returned_username)
-      }
-    )
+      await GAME_READ_CONTRACT.usernamesMapping(props.activeAddress).then(
+        (returned_username) => {
+          setUsername(returned_username)
+        }
+      )
+      setLoaded(true)
+      await new Promise((r) => setTimeout(r, 1000))
+    }
+    fetchData()
   }, [props.activeAddress])
 
   return (
     <div>
-      {props.activeAddress && registered ? (
+      {!loaded ? (
+        <div className="spinner"></div>
+      ) : (
         <div>
-          <PickGame
-            activeAddress={props.activeAddress}
-            signer={props.signer}
-            weekOfSeason={activeWeek}
-            username={username}
-          />
-          {/* <NavBar
+          {props.activeAddress && registered && (
+            <div>
+              <DashboardLayout
+                activeAddress={props.activeAddress}
+                signer={props.signer}
+                weekOfSeason={activeWeek}
+                username={username}
+              />
+              {/* <NavBar
             activeAddress={props.activeAddress}
             tokenBalance={tokenBalance}
           />
@@ -55,12 +66,15 @@ function MainAppLayout(props) {
             tokenAllowance={tokenAllowance}
           />
           <CompletedGamesTable activeAddress={props.active_address} /> */}
+            </div>
+          )}
+          {!(props.activeAddress && registered) && (
+            <RegisterLayout
+              activeAddress={props.activeAddress}
+              signer={props.signer}
+            ></RegisterLayout>
+          )}
         </div>
-      ) : (
-        <RegisterLayout
-          activeAddress={props.activeAddress}
-          signer={props.signer}
-        ></RegisterLayout>
       )}
     </div>
   )
