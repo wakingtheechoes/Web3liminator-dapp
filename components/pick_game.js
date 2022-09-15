@@ -4,6 +4,7 @@ function PickGame(props) {
   const [eliminated, setEliminated] = useState(false)
   const [picks, setPicks] = useState([])
   const [challengesRemain, setChallengesRemain] = useState(0)
+  const [pastPicks, setPastPicks] = useState([])
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -12,6 +13,9 @@ function PickGame(props) {
         console.log(gamesList)
       }
     )
+    GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
+      setPastPicks(picks)
+    })
 
     GAME_READ_CONTRACT.isEliminated(props.activeAddress).then((elim) => {
       setEliminated(elim)
@@ -100,6 +104,8 @@ function PickGame(props) {
                             className={
                               picks[props.weekOfSeason] == game.awayTeam
                                 ? 'btn btn-success btn-block btn-sm'
+                                : pastPicks.includes(game.awayTeam)
+                                ? 'btn btn-warning btn-block btn-sm'
                                 : 'btn btn-secondary btn-block btn-sm'
                             }
                           >
@@ -116,6 +122,8 @@ function PickGame(props) {
                             className={
                               picks[props.weekOfSeason] == game.homeTeam
                                 ? 'btn btn-success btn-block btn-sm'
+                                : pastPicks.includes(game.homeTeam)
+                                ? 'btn btn-warning btn-block btn-sm'
                                 : 'btn btn-secondary btn-block btn-sm'
                             }
                           >
@@ -127,7 +135,6 @@ function PickGame(props) {
                             game.kickoffTime.toNumber() * 1000
                           ).toLocaleDateString('en-US')}
                           <br />
-                          {game.kickoffTime.toString()}
                           {new Date(
                             game.kickoffTime.toNumber() * 1000
                           ).toLocaleTimeString('en-US')}
