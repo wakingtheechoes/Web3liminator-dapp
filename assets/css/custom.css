@@ -71,3 +71,7 @@ p.description {
 .outline-loss { 
   border: solid 2px red;
 }
+
+.sidebar .nav p {
+  font-size: 18px;
+}

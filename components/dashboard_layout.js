@@ -261,7 +261,7 @@ function DashboardLayout(props) {
                 </div>
                 <br />
                 <div className="row">
-                  <div class="col-lg-6 cards">
+                  <div class="col-lg-6 offset-lg-3 cards">
                     <div class="card card-pricing card-raised">
                       <div class="card-body">
                         <h3 class="card-category">Set your Pick</h3>
@@ -281,13 +281,10 @@ function DashboardLayout(props) {
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-6 cards">
+                  {/* <div class="col-lg-6 cards">
                     <div class="card card-pricing card-raised">
                       <div class="card-body">
                         <h3 class="card-category">Eliminated?</h3>
-                        {/* <div class="card-icon icon-rose">
-                          <i class="material-icons">sports_football</i>
-                        </div> */}
                         <h3 class="card-title">Buy a challenge flag.</h3>
                         <a
                           href="#"
@@ -306,7 +303,7 @@ function DashboardLayout(props) {
                         </a>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
