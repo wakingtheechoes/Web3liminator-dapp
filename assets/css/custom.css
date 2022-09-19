@@ -52,3 +52,19 @@
 p.description {
     font-size: 1rem;
 }
+
+.dark-edition .table > tbody > tr > td {
+  color: #ffffff;
+  text-align: center;
+}
+
+
+.dark-edition .table > thead > tr > th {
+  color: #ffffff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.outline-win { 
+  border: solid 2px green;
+}

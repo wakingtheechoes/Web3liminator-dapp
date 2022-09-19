@@ -109,6 +109,7 @@ function PickGame(props) {
                   <th></th>
                   <th>Home Team</th>
                   <th>Kickoff</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -118,70 +119,112 @@ function PickGame(props) {
                     className={
                       Math.floor(Date.now()) <
                       parseInt(game.kickoffTime._hex) * 1000
-                        ? 'my-0'
-                        : 'my-0 bg-dark'
+                        ? 'my-0 text-white'
+                        : game.winner == picks[props.weekOfSeason]
+                        ? 'my-0 outline-win text-white'
+                        : 'my-0 text-white'
                     }
                   >
-                    <td>
-                      <button
-                        onClick={() => {
-                          if (chainID == 137) {
-                            pickTeam(props.weekOfSeason, game.awayTeam)
-                          } else {
-                            Swal.fire({
-                              title: 'Wrong Network',
-                              text: 'You must be connected to the polygon network to make changes',
-                              icon: 'warning',
-                              // showCancelButton: true,
-                              customClass: {
-                                confirmButton: 'btn btn-success',
-                                cancelButton: 'btn btn-danger',
-                              },
-                              confirmButtonText: 'Ok',
-                            })
+                    <td
+                      className={
+                        picks[props.weekOfSeason] == game.homeTeam
+                          ? game.awayTeam == game.winner
+                            ? 'bg-success' // win
+                            : game.homeTeam == game.winner
+                            ? 'bg-error' //loss
+                            : 'bg-warning'
+                          : ''
+                      }
+                    >
+                      {Math.floor(Date.now()) <
+                      parseInt(game.kickoffTime._hex) * 1000 ? (
+                        <button
+                          onClick={() => {
+                            if (chainID == 137) {
+                              pickTeam(props.weekOfSeason, game.awayTeam)
+                            } else {
+                              Swal.fire({
+                                title: 'Wrong Network',
+                                text: 'You must be connected to the polygon network to make changes',
+                                icon: 'warning',
+                                // showCancelButton: true,
+                                customClass: {
+                                  confirmButton: 'btn btn-success',
+                                  cancelButton: 'btn btn-danger',
+                                },
+                                confirmButtonText: 'Ok',
+                              })
+                            }
+                          }}
+                          className={
+                            picks[props.weekOfSeason] == game.awayTeam
+                              ? 'btn btn-success btn-block btn-sm'
+                              : pastPicks.includes(game.awayTeam)
+                              ? 'btn btn-used btn-block btn-sm'
+                              : 'btn btn-secondary btn-block btn-sm'
                           }
-                        }}
-                        className={
-                          picks[props.weekOfSeason] == game.awayTeam
-                            ? 'btn btn-success btn-block btn-sm'
-                            : pastPicks.includes(game.awayTeam)
-                            ? 'btn btn-used btn-block btn-sm'
-                            : 'btn btn-secondary btn-block btn-sm'
-                        }
-                      >
-                        {TEAMS[game.awayTeam].abbreviation}
-                      </button>
+                        >
+                          {TEAMS[game.awayTeam].abbreviation}{' '}
+                        </button>
+                      ) : (
+                        <span>
+                          {TEAMS[game.awayTeam].abbreviation}
+                          {game.winner == game.awayTeam && (
+                            <i className="material-icons">done</i>
+                          )}
+                        </span>
+                      )}
                     </td>
                     <td className="text-center">@</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          if (chainID == 137) {
-                            pickTeam(props.weekOfSeason, game.homeTeam)
-                          } else {
-                            Swal.fire({
-                              title: 'Wrong Network',
-                              text: 'You must be connected to the polygon network to make changes',
-                              icon: 'warning',
-                              // showCancelButton: true,
-                              customClass: {
-                                confirmButton: 'btn btn-success',
-                                cancelButton: 'btn btn-danger',
-                              },
-                              confirmButtonText: 'Ok',
-                            })
+                    <td
+                      className={
+                        picks[props.weekOfSeason] == game.homeTeam
+                          ? game.homeTeam == game.winner
+                            ? 'bg-success' // win
+                            : game.awayTeam == game.winner
+                            ? 'bg-error' //loss
+                            : 'bg-warning'
+                          : ''
+                      }
+                    >
+                      {Math.floor(Date.now()) <
+                      parseInt(game.kickoffTime._hex) * 1000 ? (
+                        <button
+                          onClick={() => {
+                            if (chainID == 137) {
+                              pickTeam(props.weekOfSeason, game.homeTeam)
+                            } else {
+                              Swal.fire({
+                                title: 'Wrong Network',
+                                text: 'You must be connected to the polygon network to make changes',
+                                icon: 'warning',
+                                // showCancelButton: true,
+                                customClass: {
+                                  confirmButton: 'btn btn-success',
+                                  cancelButton: 'btn btn-danger',
+                                },
+                                confirmButtonText: 'Ok',
+                              })
+                            }
+                          }}
+                          className={
+                            picks[props.weekOfSeason] == game.homeTeam
+                              ? 'btn btn-success btn-block btn-sm'
+                              : pastPicks.includes(game.homeTeam)
+                              ? 'btn btn-used btn-block btn-sm'
+                              : 'btn btn-secondary btn-block btn-sm'
                           }
-                        }}
-                        className={
-                          picks[props.weekOfSeason] == game.homeTeam
-                            ? 'btn btn-success btn-block btn-sm'
-                            : pastPicks.includes(game.homeTeam)
-                            ? 'btn btn-used btn-block btn-sm'
-                            : 'btn btn-secondary btn-block btn-sm'
-                        }
-                      >
-                        {TEAMS[game.homeTeam].abbreviation}
-                      </button>
+                        >
+                          {TEAMS[game.homeTeam].abbreviation}
+                        </button>
+                      ) : (
+                        <span>
+                          {TEAMS[game.homeTeam].abbreviation}{' '}
+                          {game.winner == game.homeTeam && (
+                            <i className="material-icons">done</i>
+                          )}
+                        </span>
+                      )}
                     </td>
                     <td>
                       {new Date(
@@ -191,6 +234,14 @@ function PickGame(props) {
                       {new Date(
                         game.kickoffTime.toNumber() * 1000
                       ).toLocaleTimeString('en-US')}
+                    </td>
+                    <td>
+                      {Math.floor(Date.now()) <
+                      parseInt(game.kickoffTime._hex) * 1000
+                        ? 'Not Started'
+                        : game.resultHasBeenSet
+                        ? 'Complete'
+                        : 'Locked'}
                     </td>
                   </tr>
                 ))}
