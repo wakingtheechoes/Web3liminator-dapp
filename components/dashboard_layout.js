@@ -36,7 +36,7 @@ function DashboardLayout(props) {
     GAME_READ_CONTRACT.addressesToChallengesBoughtMapping(
       props.activeAddress
     ).then((challenges) => {
-      setChallengesRemain(challenges)
+      setChallengesRemain(1 - challenges)
     })
 
     GAME_READ_CONTRACT.getAllPicksByWeek(props.weekOfSeason).then((picks) => {
@@ -185,8 +185,18 @@ function DashboardLayout(props) {
           {eliminated ? (
             <div className="alert alert-danger" role="alert">
               <strong>Oh No!</strong> It looks like you have been eliminated.
-              Good luck next season! You may keep picking teams weekly if you
-              want to play along for fun.
+              {challengesRemain > 0 && props.weekOfSeason < 11 ? (
+                <p className="mt-2">
+                  You are eligible to buy back into the eliminator by buying a
+                  challenge flag for 100 $STEAK. You will not be able to make
+                  any more picks until you buy one.
+                </p>
+              ) : (
+                <p className="mt-2">
+                  It looks like a challenge flag is not an option :( Better luck
+                  next season
+                </p>
+              )}
             </div>
           ) : (
             <div className="alert alert-success" role="alert">

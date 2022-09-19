@@ -6,7 +6,7 @@ function PickGame(props) {
   const [challengesRemain, setChallengesRemain] = useState(0)
   const [pastPicks, setPastPicks] = useState([])
   const [chainID, setChainID] = useState('0')
-  const [pickLocked, setPickLocked] = useState(true)
+  const [pickLocked, setPickLocked] = useState(false)
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -49,16 +49,17 @@ function PickGame(props) {
   }, [props.weekOfSeason, props.activeAddress])
 
   useEffect(() => {
+    let locked = false
     games.forEach((game) => {
-      console.log('game', game)
       if (
-        Math.floor(Date.now()) < parseInt(game.kickoffTime._hex) * 1000 &&
+        Math.floor(Date.now()) > parseInt(game.kickoffTime._hex) * 1000 &&
         (game.homeTeam == picks[props.weekOfSeason] ||
           game.awayTeam == picks[props.weekOfSeason])
       ) {
-        setPickLocked(true)
+        locked = true
       }
     })
+    setPickLocked(locked)
   }, [games, picks])
 
   function pickTeam(week, team_id) {
@@ -163,7 +164,8 @@ function PickGame(props) {
                     >
                       {Math.floor(Date.now()) <
                         parseInt(game.kickoffTime._hex) * 1000 &&
-                      !pickLocked ? (
+                      !pickLocked &&
+                      !pastPicks.includes(game.awayTeam) ? (
                         <button
                           onClick={() => {
                             if (chainID == 137) {
@@ -214,7 +216,8 @@ function PickGame(props) {
                     >
                       {Math.floor(Date.now()) <
                         parseInt(game.kickoffTime._hex) * 1000 &&
-                      !pickLocked ? (
+                      !pickLocked &&
+                      !pastPicks.includes(game.homeTeam) ? (
                         <button
                           onClick={() => {
                             if (chainID == 137) {
