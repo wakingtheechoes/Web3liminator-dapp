@@ -15,9 +15,7 @@ function PickGame(props) {
       }
     )
     GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
-      setPastPicks([
-        18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      ])
+      setPastPicks(picks)
     })
 
     GAME_READ_CONTRACT.isEliminated(props.activeAddress).then((elim) => {
@@ -25,7 +23,7 @@ function PickGame(props) {
     })
 
     GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
-      setPicks([18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      setPicks(picks)
     })
 
     GAME_READ_CONTRACT.addressesToChallengesBoughtMapping(
