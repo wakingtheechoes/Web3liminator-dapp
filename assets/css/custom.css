@@ -68,3 +68,6 @@ p.description {
 .outline-win { 
   border: solid 2px green;
 }
+.outline-loss { 
+  border: solid 2px red;
+}

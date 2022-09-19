@@ -15,7 +15,9 @@ function PickGame(props) {
       }
     )
     GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
-      setPastPicks(picks)
+      setPastPicks([
+        18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      ])
     })
 
     GAME_READ_CONTRACT.isEliminated(props.activeAddress).then((elim) => {
@@ -23,7 +25,7 @@ function PickGame(props) {
     })
 
     GAME_READ_CONTRACT.getPicksByAddress(props.activeAddress).then((picks) => {
-      setPicks(picks)
+      setPicks([18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     })
 
     GAME_READ_CONTRACT.addressesToChallengesBoughtMapping(
@@ -122,16 +124,19 @@ function PickGame(props) {
                         ? 'my-0 text-white'
                         : game.winner == picks[props.weekOfSeason]
                         ? 'my-0 outline-win text-white'
+                        : game.homeTeam == picks[props.weekOfSeason] ||
+                          game.awayTeam == picks[props.weekOfSeason]
+                        ? 'my-0 outline-loss text-white'
                         : 'my-0 text-white'
                     }
                   >
                     <td
                       className={
-                        picks[props.weekOfSeason] == game.homeTeam
+                        picks[props.weekOfSeason] == game.awayTeam
                           ? game.awayTeam == game.winner
                             ? 'bg-success' // win
                             : game.homeTeam == game.winner
-                            ? 'bg-error' //loss
+                            ? 'bg-danger' //loss
                             : 'bg-warning'
                           : ''
                       }

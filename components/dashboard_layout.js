@@ -261,7 +261,7 @@ function DashboardLayout(props) {
                 </div>
                 <br />
                 <div className="row">
-                  <div class="col-lg-6 offset-lg-3 cards">
+                  <div class="col-lg-6 cards">
                     <div class="card card-pricing card-raised">
                       <div class="card-body">
                         <h3 class="card-category">Set your Pick</h3>
@@ -277,6 +277,32 @@ function DashboardLayout(props) {
                           class="btn btn-rose btn-round"
                         >
                           Click to see Games
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 cards">
+                    <div class="card card-pricing card-raised">
+                      <div class="card-body">
+                        <h3 class="card-category">Eliminated?</h3>
+                        {/* <div class="card-icon icon-rose">
+                          <i class="material-icons">sports_football</i>
+                        </div> */}
+                        <h3 class="card-title">Buy a challenge flag.</h3>
+                        <a
+                          href="#"
+                          onClick={() => setPickWeek(props.weekOfSeason)}
+                          class="btn btn-rose btn-round"
+                        >
+                          Click to approve STEAK
+                        </a>
+                        <br />
+                        <a
+                          href="#"
+                          onClick={() => setPickWeek(props.weekOfSeason)}
+                          class="btn btn-rose btn-round"
+                        >
+                          Click to buy a challenge
                         </a>
                       </div>
                     </div>
