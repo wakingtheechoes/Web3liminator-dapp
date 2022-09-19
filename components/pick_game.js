@@ -83,7 +83,16 @@ function PickGame(props) {
     <div className="ml-auto mr-auto">
       <div className="card-header">
         <h3>
-          Pick a team below to win on week {props.weekOfSeason + 2}
+          {pickLocked ? (
+            <span>
+              {'Your pick for weeek '} {props.weekOfSeason + 2}
+              {' is now locked. Good luck!'}
+            </span>
+          ) : (
+            <span>
+              {'Pick a team below to win on week '} {props.weekOfSeason + 2}
+            </span>
+          )}
           {!pickLocked && pastPicks[props.weekOfSeason] > 0 && (
             <span>
               , or{' '}
@@ -147,8 +156,8 @@ function PickGame(props) {
                           ? game.awayTeam == game.winner
                             ? 'bg-success' // win
                             : game.homeTeam == game.winner
-                            ? 'bg-warning' //loss
-                            : 'bg-secondary'
+                            ? 'bg-danger' //loss
+                            : 'bg-info'
                           : ''
                       }
                     >
@@ -198,8 +207,8 @@ function PickGame(props) {
                           ? game.homeTeam == game.winner
                             ? 'bg-success' // win
                             : game.awayTeam == game.winner
-                            ? 'bg-warning' //loss
-                            : 'bg-secondary'
+                            ? 'bg-danger' //loss
+                            : 'bg-info'
                           : ''
                       }
                     >
