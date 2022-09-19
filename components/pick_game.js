@@ -106,7 +106,6 @@ function PickGame(props) {
               <thead className="">
                 <tr>
                   <th>Away Team</th>
-                  <th></th>
                   <th>Home Team</th>
                   <th>Kickoff</th>
                   <th>Status</th>
@@ -178,7 +177,6 @@ function PickGame(props) {
                         </span>
                       )}
                     </td>
-                    <td className="text-center">@</td>
                     <td
                       className={
                         picks[props.weekOfSeason] == game.homeTeam
@@ -218,10 +216,12 @@ function PickGame(props) {
                               : 'btn btn-secondary btn-block btn-sm'
                           }
                         >
+                          {'@ '}
                           {TEAMS[game.homeTeam].abbreviation}
                         </button>
                       ) : (
                         <span>
+                          {'@ '}
                           {TEAMS[game.homeTeam].abbreviation}{' '}
                           {game.winner == game.homeTeam && (
                             <i className="material-icons">done</i>
