@@ -6,6 +6,7 @@ function PickGame(props) {
   const [challengesRemain, setChallengesRemain] = useState(0)
   const [pastPicks, setPastPicks] = useState([])
   const [chainID, setChainID] = useState('0')
+  const [pickLocked, setPickLocked] = useState(true)
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -47,6 +48,19 @@ function PickGame(props) {
     })
   }, [props.weekOfSeason, props.activeAddress])
 
+  useEffect(() => {
+    games.forEach((game) => {
+      console.log('game', game)
+      if (
+        Math.floor(Date.now()) < parseInt(game.kickoffTime._hex) * 1000 &&
+        (game.homeTeam == picks[props.weekOfSeason] ||
+          game.awayTeam == picks[props.weekOfSeason])
+      ) {
+        setPickLocked(true)
+      }
+    })
+  }, [games, picks])
+
   function pickTeam(week, team_id) {
     console.log(week, team_id)
     console.log(GAME_READ_WRITE_CONTRACT)
@@ -70,7 +84,7 @@ function PickGame(props) {
       <div className="card-header">
         <h3>
           Pick a team below to win on week {props.weekOfSeason + 2}
-          {pastPicks[props.weekOfSeason] > 0 && (
+          {!pickLocked && pastPicks[props.weekOfSeason] > 0 && (
             <span>
               , or{' '}
               <button
@@ -133,13 +147,14 @@ function PickGame(props) {
                           ? game.awayTeam == game.winner
                             ? 'bg-success' // win
                             : game.homeTeam == game.winner
-                            ? 'bg-danger' //loss
-                            : 'bg-warning'
+                            ? 'bg-warning' //loss
+                            : 'bg-secondary'
                           : ''
                       }
                     >
                       {Math.floor(Date.now()) <
-                      parseInt(game.kickoffTime._hex) * 1000 ? (
+                        parseInt(game.kickoffTime._hex) * 1000 &&
+                      !pickLocked ? (
                         <button
                           onClick={() => {
                             if (chainID == 137) {
@@ -183,13 +198,14 @@ function PickGame(props) {
                           ? game.homeTeam == game.winner
                             ? 'bg-success' // win
                             : game.awayTeam == game.winner
-                            ? 'bg-error' //loss
-                            : 'bg-warning'
+                            ? 'bg-warning' //loss
+                            : 'bg-secondary'
                           : ''
                       }
                     >
                       {Math.floor(Date.now()) <
-                      parseInt(game.kickoffTime._hex) * 1000 ? (
+                        parseInt(game.kickoffTime._hex) * 1000 &&
+                      !pickLocked ? (
                         <button
                           onClick={() => {
                             if (chainID == 137) {
