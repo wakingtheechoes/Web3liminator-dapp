@@ -304,35 +304,39 @@ function DashboardLayout(props) {
                     <div className="card card-pricing card-raised">
                       <div className="card-body">
                         <h3 className="card-category">Eliminated?</h3>
-                        <h3 className="card-title">Buy a challenge flag.</h3>
+                        <h3 className="card-title">Buy a challenge flag</h3>
                         <p>
                           A challenge flag nullifies one losing pick, and can
                           only be bought or used through week 9 of the NFL
                           season. One challenge flag can be bought per wallet.
                         </p>
-                        {steakAllowance > 100 ? (
-                          <a
-                            href="#"
-                            onClick={() =>
-                              GAME_READ_WRITE_CONTRACT.buyAChallengeFlag()
-                            }
-                            className="btn btn-rose btn-round"
-                          >
-                            Click to buy a challenge
-                          </a>
+                        {challengesRemain > 0 ? (
+                          steakAllowance > 100 ? (
+                            <a
+                              href="#"
+                              onClick={() =>
+                                GAME_READ_WRITE_CONTRACT.buyAChallengeFlag()
+                              }
+                              className="btn btn-rose btn-round"
+                            >
+                              Click to buy a challenge
+                            </a>
+                          ) : (
+                            <a
+                              href="#"
+                              onClick={() =>
+                                TOKEN_READ_WRITE_CONTRACT.approve(
+                                  GAME_CONTRACT_ADDRESS,
+                                  ethers.utils.parseUnits('1000', 18)
+                                )
+                              }
+                              className="btn btn-rose btn-round"
+                            >
+                              Click to approve STEAK
+                            </a>
+                          )
                         ) : (
-                          <a
-                            href="#"
-                            onClick={() =>
-                              TOKEN_READ_WRITE_CONTRACT.approve(
-                                GAME_CONTRACT_ADDRESS,
-                                ethers.utils.parseUnits('1000', 18)
-                              )
-                            }
-                            className="btn btn-rose btn-round"
-                          >
-                            Click to approve STEAK
-                          </a>
+                          <h3>Challenge Flag Already Bought</h3>
                         )}
                         <br />
                       </div>
