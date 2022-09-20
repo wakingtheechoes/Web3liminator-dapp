@@ -9,6 +9,7 @@ function DashboardLayout(props) {
   const [pickWeek, setPickWeek] = useState(null)
   const [playersElimStatus, setPlayersElimStatus] = useState([])
   const [currentWeekPicks, setCurrentWeekPicks] = useState([])
+  const [steakAllowance, setSteakAllowance] = useState(0)
 
   useEffect(() => {
     GAME_READ_CONTRACT.getAllGamesForWeek(props.weekOfSeason).then(
@@ -42,6 +43,14 @@ function DashboardLayout(props) {
     GAME_READ_CONTRACT.getAllPicksByWeek(props.weekOfSeason).then((picks) => {
       setCurrentWeekPicks(picks)
       getDataForPieChart(picks)
+    })
+
+    TOKEN_READ_CONTRACT.allowance(
+      props.activeAddress,
+      GAME_CONTRACT_ADDRESS
+    ).then((allowance) => {
+      console.log(allowance)
+      setSteakAllowance(parseInt(ethers.utils.formatUnits(allowance, 18)))
     })
     // GAME_READ_CONTRACT.getGameEntrants(props.id).then((gEntries) => {
     //   let myEntryCount = 0
@@ -164,7 +173,7 @@ function DashboardLayout(props) {
           <div className="container-fluid">
             <div className="navbar-wrapper">
               <div className="navbar-minimize"></div>
-              <a className="navbar-brand" href="javascript:;"></a>
+              <a className="navbar-brand" href="#"></a>
             </div>
             <button
               className="navbar-toggler"
@@ -271,49 +280,64 @@ function DashboardLayout(props) {
                 </div>
                 <br />
                 <div className="row">
-                  <div class="col-lg-6 offset-lg-3 cards">
-                    <div class="card card-pricing card-raised">
-                      <div class="card-body">
-                        <h3 class="card-category">Set your Pick</h3>
-                        <div class="card-icon icon-rose">
-                          <i class="material-icons">sports_football</i>
+                  <div className="col-lg-6 cards">
+                    <div className="card card-pricing card-raised">
+                      <div className="card-body">
+                        <h3 className="card-category">Set your Pick</h3>
+                        <div className="card-icon icon-rose">
+                          <i className="material-icons">sports_football</i>
                         </div>
-                        <h3 class="card-title">
+                        <h3 className="card-title">
                           WEEK {props.weekOfSeason + 2}
                         </h3>
                         <a
                           href="#"
                           onClick={() => setPickWeek(props.weekOfSeason)}
-                          class="btn btn-rose btn-round"
+                          className="btn btn-rose btn-round"
                         >
                           Click to see Games
                         </a>
                       </div>
                     </div>
                   </div>
-                  {/* <div class="col-lg-6 cards">
-                    <div class="card card-pricing card-raised">
-                      <div class="card-body">
-                        <h3 class="card-category">Eliminated?</h3>
-                        <h3 class="card-title">Buy a challenge flag.</h3>
-                        <a
-                          href="#"
-                          onClick={() => setPickWeek(props.weekOfSeason)}
-                          class="btn btn-rose btn-round"
-                        >
-                          Click to approve STEAK
-                        </a>
+                  <div className="col-lg-6 cards">
+                    <div className="card card-pricing card-raised">
+                      <div className="card-body">
+                        <h3 className="card-category">Eliminated?</h3>
+                        <h3 className="card-title">Buy a challenge flag.</h3>
+                        <p>
+                          A challenge flag nullifies one losing pick, and can
+                          only be bought or used through week 9 of the NFL
+                          season. One challenge flag can be bought per wallet.
+                        </p>
+                        {steakAllowance > 100 ? (
+                          <a
+                            href="#"
+                            onClick={() =>
+                              GAME_READ_WRITE_CONTRACT.buyAChallengeFlag()
+                            }
+                            className="btn btn-rose btn-round"
+                          >
+                            Click to buy a challenge
+                          </a>
+                        ) : (
+                          <a
+                            href="#"
+                            onClick={() =>
+                              TOKEN_READ_WRITE_CONTRACT.approve(
+                                GAME_CONTRACT_ADDRESS,
+                                ethers.utils.parseUnits('1000', 18)
+                              )
+                            }
+                            className="btn btn-rose btn-round"
+                          >
+                            Click to approve STEAK
+                          </a>
+                        )}
                         <br />
-                        <a
-                          href="#"
-                          onClick={() => setPickWeek(props.weekOfSeason)}
-                          class="btn btn-rose btn-round"
-                        >
-                          Click to buy a challenge
-                        </a>
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>
